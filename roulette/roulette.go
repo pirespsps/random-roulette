@@ -10,9 +10,9 @@ import (
 	"math/rand"
 )
 
-var options = make([]string, 0, 10)
+var options = []string{}
 
-func addElement(option string) error {
+func AddElement(option string) error {
 
 	if option == "" {
 		return errors.New("option is empty")
@@ -27,7 +27,7 @@ func addElement(option string) error {
 	return nil
 }
 
-func spin() (string, error) {
+func Spin() (string, error) {
 
 	if len(options) == 0 {
 		return "", errors.New("options are empty")
@@ -39,7 +39,7 @@ func spin() (string, error) {
 
 }
 
-func removeElement(value string) {
+func RemoveElement(value string) {
 
 	for i, v := range options {
 		if v == value {
@@ -48,6 +48,18 @@ func removeElement(value string) {
 		}
 	}
 
+}
+
+func PrintOptions() string {
+	str := "Opções registradas: "
+
+	for _, v := range options {
+		str += v + " "
+	}
+
+	str += "\n\n"
+
+	return str
 }
 
 // go já gerencia o aumento do cap pelo append, função inutil
