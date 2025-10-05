@@ -2,10 +2,10 @@ package main
 
 import (
 	"bufio"
-	"fmt"
 	"log"
 	"os"
 
+	gui "gui.com/gui"
 	roulette "roulette.com/roulette"
 )
 
@@ -17,16 +17,18 @@ func main() {
 
 	var value string
 
+	gui.Title()
+
 	for value != "spin" {
 
-		fmt.Print(roulette.PrintOptions())
+		gui.Menu(roulette.GetOptions())
 
-		fmt.Print("Digite o valor | \"spin\" para rodar\n")
 		scanner.Scan()
-
 		value = scanner.Text()
 
-		fmt.Print("\n-----------------------------------------------\n")
+		if value == "q" {
+			os.Exit(1)
+		}
 
 		if value != "spin" {
 			roulette.AddElement(value)
@@ -39,6 +41,6 @@ func main() {
 		log.Fatal(err)
 	}
 
-	fmt.Printf("Resultado: %v", result)
+	gui.Resultado(result)
 
 }

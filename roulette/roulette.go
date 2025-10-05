@@ -50,16 +50,8 @@ func RemoveElement(value string) {
 
 }
 
-func PrintOptions() string {
-	str := "Opções registradas: "
-
-	for _, v := range options {
-		str += v + " "
-	}
-
-	str += "\n\n"
-
-	return str
+func GetOptions() []string {
+	return options
 }
 
 // go já gerencia o aumento do cap pelo append, função inutil
