@@ -10,7 +10,7 @@ func Menu(op []string) {
 
 	line()
 
-	options(op)
+	Options(op)
 
 	instructions()
 
@@ -40,7 +40,7 @@ func Resultado(result string) {
 	fmt.Println(style.Render(result))
 }
 
-func options(options []string) {
+func Options(options []string) string {
 
 	style := lipgloss.NewStyle().
 		Foreground(lipgloss.Color("#FAFAFA")).
@@ -54,7 +54,7 @@ func options(options []string) {
 		text += lipgloss.NewStyle().Foreground(lipgloss.Color("#7D56F4")).Render(" | ")
 	}
 
-	fmt.Println(lipgloss.NewStyle().MarginBottom(3).Render(text))
+	return lipgloss.NewStyle().Render(text + "\n\n")
 }
 
 func instructions() {
@@ -75,7 +75,7 @@ func instructions() {
 	fmt.Println(lipgloss.NewStyle().MarginBottom(1).Render(text))
 }
 
-func Title() {
+func Title() string {
 
 	var myCuteBorder = lipgloss.Border{
 		Top:         "._.:*:",
@@ -99,7 +99,7 @@ func Title() {
 		Border(myCuteBorder).
 		BorderForeground(lipgloss.Color("#e1027e"))
 
-	fmt.Println(style.Render("Roulette"))
+	return style.Render("Roulette\n")
 }
 
 func line() {

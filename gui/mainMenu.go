@@ -5,29 +5,59 @@ package gui
 import (
 	"fmt"
 
+	"os"
+
+	"github.com/charmbracelet/bubbles/textarea"
+	"github.com/charmbracelet/lipgloss"
+
 	tea "github.com/charmbracelet/bubbletea"
-	//"os"
 )
+
+func NewProgram() {
+	p := tea.NewProgram(initialModel())
+
+	if _, err := p.Run(); err != nil {
+		fmt.Printf("Alas, there's been an error: %v", err)
+		os.Exit(1)
+	}
+}
 
 type model struct {
 	choices  []string
+	options  []string
+	textarea textarea.Model
 	cursor   int
 	selected map[int]struct{}
 }
 
 func initialModel() model {
+	ta := textarea.New()
+	ta.Placeholder = "Adicione um item..."
+	ta.Focus()
+	ta.Prompt = "|"
+	ta.CharLimit = 280
+	ta.SetWidth(30)
+	ta.SetHeight(1)
+	ta.FocusedStyle.CursorLine = lipgloss.NewStyle()
+	ta.ShowLineNumbers = false
+
 	return model{
 		choices: []string{"Novo", "Rodar", "Deletar"},
+
+		textarea: ta,
+
+		options: []string{},
 
 		selected: make(map[int]struct{}),
 	}
 }
 
 func (m model) Init() tea.Cmd {
-	return nil
+	return textarea.Blink
 }
 
 func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
+
 	switch msg := msg.(type) {
 	case tea.KeyMsg:
 		switch msg.String() {
@@ -35,22 +65,19 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		case "ctrl+c", "q":
 			return m, tea.Quit
 
-		case "up", "k":
-			if m.cursor > 1 {
+		case "left", "a":
+			if m.cursor >= 1 {
 				m.cursor--
 			}
 
-		case "down", "j":
+		case "right", "d":
 			if m.cursor < len(m.choices)-1 {
 				m.cursor++
 			}
 
 		case "enter", " ":
-			_, ok := m.selected[m.cursor]
-			if ok {
-				delete(m.selected, m.cursor)
-			} else {
-				m.selected[m.cursor] = struct{}{}
+			switch m.selected[m.cursor] {
+			//
 			}
 		}
 	}
@@ -58,7 +85,9 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 }
 
 func (m model) View() string {
-	s := "Adicione itens\n\n"
+	s := Title() + "\n\n"
+
+	s += Options(m.options)
 
 	for i, choice := range m.choices {
 
@@ -72,8 +101,12 @@ func (m model) View() string {
 			checked = "x"
 		}
 
-		s += fmt.Sprintf("%s [%s] %s \n", cursor, checked, choice)
+		s += fmt.Sprintf("%s [%s] %s ", cursor, checked, choice)
 	}
-	s += "\nAperte Q para sair\n"
+
+	s += "\n\n" + m.textarea.View()
+
+	s += "\n\nAperte Q para sair\n"
+
 	return s
 }

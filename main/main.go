@@ -1,46 +1,48 @@
 package main
 
 import (
-	"bufio"
+	// "bufio"
 	"log"
-	"os"
-
+	// "os"
 	gui "gui.com/gui"
-	roulette "roulette.com/roulette"
+	// roulette "roulette.com/roulette"
 )
 
 func main() {
 
 	log.SetPrefix("randomizer:")
 	log.SetFlags(0)
-	scanner := bufio.NewScanner(os.Stdin)
 
-	var value string
+	gui.NewProgram()
 
-	gui.Title()
+	// scanner := bufio.NewScanner(os.Stdin)
 
-	for value != "spin" {
+	// var value string
 
-		gui.Menu(roulette.GetOptions())
+	// gui.Title()
 
-		scanner.Scan()
-		value = scanner.Text()
+	// for value != "spin" {
 
-		if value == "q" {
-			os.Exit(1)
-		}
+	// 	gui.Menu(roulette.GetOptions())
 
-		if value != "spin" {
-			roulette.AddElement(value)
-		}
-	}
+	// 	scanner.Scan()
+	// 	value = scanner.Text()
 
-	result, err := roulette.Spin()
+	// 	if value == "q" {
+	// 		os.Exit(1)
+	// 	}
 
-	if err != nil {
-		log.Fatal(err)
-	}
+	// 	if value != "spin" {
+	// 		roulette.AddElement(value)
+	// 	}
+	// }
 
-	gui.Resultado(result)
+	// result, err := roulette.Spin()
+
+	// if err != nil {
+	// 	log.Fatal(err)
+	// }
+
+	// gui.Resultado(result)
 
 }
