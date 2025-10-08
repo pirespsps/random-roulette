@@ -77,7 +77,8 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 
 		case "enter", " ":
 			switch m.selected[m.cursor] {
-			//
+			default:
+				fmt.Print(m.selected[m.cursor])
 			}
 		}
 	}
@@ -93,7 +94,7 @@ func (m model) View() string {
 
 		cursor := " "
 		if m.cursor == i {
-			cursor = ">"
+			cursor = Cursor()
 		}
 
 		checked := " "

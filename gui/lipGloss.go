@@ -6,6 +6,9 @@ import (
 	"github.com/charmbracelet/lipgloss"
 )
 
+const rosa = lipgloss.Color("#e1027e")
+const roxo = lipgloss.Color("#7D56F4")
+
 func Menu(op []string) {
 
 	line()
@@ -33,7 +36,7 @@ func Resultado(result string) {
 		Bold(true).
 		Foreground(lipgloss.Color("#FAFAFA")).
 		Padding(2).
-		Background(lipgloss.Color("#7D56F4")).
+		Background(roxo).
 		Border(border).
 		Height(2)
 
@@ -44,14 +47,14 @@ func Options(options []string) string {
 
 	style := lipgloss.NewStyle().
 		Foreground(lipgloss.Color("#FAFAFA")).
-		Background(lipgloss.Color("#e1027e"))
+		Background(rosa)
 
 	text := "Valores: "
 
 	for _, v := range options {
 
 		text += style.Render(v)
-		text += lipgloss.NewStyle().Foreground(lipgloss.Color("#7D56F4")).Render(" | ")
+		text += lipgloss.NewStyle().Foreground(lipgloss.Color(roxo)).Render(" | ")
 	}
 
 	return lipgloss.NewStyle().Render(text + "\n\n")
@@ -59,10 +62,10 @@ func Options(options []string) string {
 
 func instructions() {
 	style := lipgloss.NewStyle().
-		Foreground(lipgloss.Color("#7D56F4"))
+		Foreground(lipgloss.Color(roxo))
 
 	barStyle := lipgloss.NewStyle().
-		Foreground(lipgloss.Color("#e1027e"))
+		Foreground(lipgloss.Color(rosa))
 
 	text := "Digite o valor"
 	text += barStyle.Render(" | ")
@@ -91,13 +94,13 @@ func Title() string {
 	var style = lipgloss.NewStyle().
 		Bold(true).
 		Foreground(lipgloss.Color("#FAFAFA")).
-		Background(lipgloss.Color("#7D56F4")).
+		Background(lipgloss.Color(roxo)).
 		PaddingTop(1).
 		PaddingBottom(1).
 		PaddingLeft(5).
 		Width(22).
 		Border(myCuteBorder).
-		BorderForeground(lipgloss.Color("#e1027e"))
+		BorderForeground(lipgloss.Color(rosa))
 
 	return style.Render("Roulette\n")
 }
@@ -105,7 +108,15 @@ func Title() string {
 func line() {
 	var style = lipgloss.NewStyle().
 		Bold(true).
-		Foreground(lipgloss.Color("#e1027e"))
+		Foreground(rosa)
 
 	fmt.Println(style.Render("\n-----------------------------------------------\n"))
+}
+
+func Cursor() string {
+	var style = lipgloss.NewStyle().
+		Foreground(rosa).
+		Bold(true)
+
+	return style.Render(">")
 }
