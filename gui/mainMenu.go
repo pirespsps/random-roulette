@@ -102,7 +102,7 @@ func (m model) View() string {
 			checked = "x"
 		}
 
-		s += fmt.Sprintf("%s [%s] %s ", cursor, checked, choice)
+		s += fmt.Sprintf("%s%s|%s| ", cursor, checked, choice)
 	}
 
 	s += "\n\n" + m.textarea.View()
