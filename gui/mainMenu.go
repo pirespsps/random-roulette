@@ -103,6 +103,7 @@ func (m model) View() string {
 		}
 
 		s += fmt.Sprintf("%s |%s|", cursor, choice)
+
 	}
 
 	s += "\n" + m.userInput.View() + "\n\n"
