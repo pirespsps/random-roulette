@@ -7,10 +7,9 @@ import (
 
 	"os"
 
-	"github.com/charmbracelet/bubbles/textarea"
-	"github.com/charmbracelet/lipgloss"
-
+	"github.com/charmbracelet/bubbles/textinput"
 	tea "github.com/charmbracelet/bubbletea"
+	"github.com/charmbracelet/lipgloss"
 )
 
 func NewProgram() {
@@ -23,37 +22,32 @@ func NewProgram() {
 }
 
 type model struct {
-	choices  []string
-	options  []string
-	textarea textarea.Model
-	cursor   int
-	selected map[int]struct{}
+	choices   []string
+	options   []string
+	cursor    int
+	userInput textinput.Model
 }
 
 func initialModel() model {
-	ta := textarea.New()
-	ta.Placeholder = "Adicione um item..."
-	ta.Focus()
-	ta.Prompt = "|"
-	ta.CharLimit = 280
-	ta.SetWidth(30)
-	ta.SetHeight(1)
-	ta.FocusedStyle.CursorLine = lipgloss.NewStyle()
-	ta.ShowLineNumbers = false
+
+	i := textinput.New()
+	i.Prompt = ""
+	i.Cursor.Style = lipgloss.NewStyle().Foreground(lipgloss.Color("63"))
+	i.Width = 48
+	i.SetValue("")
+	i.CursorEnd()
 
 	return model{
 		choices: []string{"Novo", "Rodar", "Deletar"},
 
-		textarea: ta,
+		userInput: i,
 
 		options: []string{},
-
-		selected: make(map[int]struct{}),
 	}
 }
 
 func (m model) Init() tea.Cmd {
-	return textarea.Blink
+	return textinput.Blink
 }
 
 func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
@@ -62,23 +56,34 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	case tea.KeyMsg:
 		switch msg.String() {
 
-		case "ctrl+c", "q":
+		case "ctrl+c":
 			return m, tea.Quit
 
-		case "left", "a":
+		case "left":
 			if m.cursor >= 1 {
 				m.cursor--
 			}
 
-		case "right", "d":
+		case "right":
 			if m.cursor < len(m.choices)-1 {
 				m.cursor++
 			}
 
 		case "enter", " ":
-			switch m.selected[m.cursor] {
-			default:
-				fmt.Print(m.selected[m.cursor])
+			switch m.choices[m.cursor] {
+
+			case "Novo":
+				m.userInput.Focus()
+
+				var cmd tea.Cmd
+				m.userInput, cmd = m.userInput.Update(msg)
+				return m, cmd
+
+			case "Rodar":
+				fmt.Print("Rodar")
+			case "Deletar":
+				fmt.Print("deletar")
+
 			}
 		}
 	}
@@ -97,17 +102,12 @@ func (m model) View() string {
 			cursor = Cursor()
 		}
 
-		checked := " "
-		if _, ok := m.selected[i]; ok {
-			checked = "x"
-		}
-
-		s += fmt.Sprintf("%s [%s] %s ", cursor, checked, choice)
+		s += fmt.Sprintf("%s |%s|", cursor, choice)
 	}
 
-	s += "\n\n" + m.textarea.View()
+	s += "\n" + m.userInput.View() + "\n\n"
 
-	s += "\n\nAperte Q para sair\n"
+	s += "\n\nAperte CTRL+C para sair\n"
 
 	return s
 }
