@@ -26,6 +26,7 @@ type model struct {
 	options   []string
 	cursor    int
 	userInput textinput.Model
+	choice    string
 }
 
 func initialModel() model {
@@ -75,19 +76,21 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			case "Novo":
 				m.userInput.Focus()
 
-				var cmd tea.Cmd
-				m.userInput, cmd = m.userInput.Update(msg)
-				return m, cmd
-
 			case "Rodar":
 				fmt.Print("Rodar")
 			case "Deletar":
-				fmt.Print("deletar")
+				fmt.Print("Deletar")
 
 			}
 		}
 	}
-	return m, nil
+
+	var cmd tea.Cmd
+	m.userInput, cmd = m.userInput.Update(msg)
+	m.choice = m.userInput.Prompt
+
+	return m, cmd
+
 }
 
 func (m model) View() string {
@@ -109,6 +112,8 @@ func (m model) View() string {
 	s += "\n" + m.userInput.View() + "\n\n"
 
 	s += "\n\nAperte CTRL+C para sair\n"
+
+	s += m.choice
 
 	return s
 }
